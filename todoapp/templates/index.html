@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Document{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+
+    </head>
+<body>
+    <header class="container-nav">
+        <h1>Welcome to TodoGo!!</h1>
+        <div class="nav-actions">
+            <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-register">Register</a>
+        </div>
+    </header>
+    <main class="container-main">
+        {% block content %}
+        <div class="hero">
+            <img src="{% static 'logomain.png' %}" alt="Todo Image" class="todo-image"/>
+            <a href="{% url 'register' %}" class="btn btn-start">Get Started</a>
+        </div>
+        {% endblock %}
+    </main>
+</body>
+</html>

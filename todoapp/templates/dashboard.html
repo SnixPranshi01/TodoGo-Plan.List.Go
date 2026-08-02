@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+</head>
+<body>
+    <div class="dashboard">
+        <section class="card">
+            <h1>Welcome, {{ user.username }}!</h1>
+        </section>
+
+        <section class="card">
+            <h2>Profile</h2>
+            <div class="profile-grid">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"Not provided" }}</p>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Add Task</h2>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <div class="form-grid">
+                    <input type="text" name="title" placeholder="Task title" required>
+                    <input type="text" name="description" placeholder="Description">
+                    <input type="date" name="due_date" required>
+                    <select name="priority">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    <button type="submit">Add Task</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="card">
+            <h2>Your Tasks</h2>
+            {% if tasks %}
+                <ul class="task-list">
+                    {% for task in tasks %}
+                        <li class="task-item">
+                            <strong>{{ task.title }}</strong> - {{ task.priority }}
+                            <p>{{ task.description }}</p>
+                            <p>Due: {{ task.due_date }}</p>
+                            <div class="task-actions">
+                                {% if task.completed %}
+                                    <span>Completed</span>
+                                {% else %}
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="complete">
+                                        <input type="hidden" name="task_id" value="{{ task.id }}">
+                                        <button type="submit" class="complete-btn">Complete</button>
+                                    </form>
+                                {% endif %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No tasks yet.</p>
+            {% endif %}
+        </section>
+
+        <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+    </div>
+</body>
+</html>

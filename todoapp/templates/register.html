@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+</head>
+<body>
+    <form action="" method="POST" class="auth-form">
+        {% csrf_token %}
+        <h1>Register</h1>
+        {% for field in form %}
+        <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            <input type="{{ field.field.widget.input_type }}" id="{{ field.id_for_label }}" name="{{ field.name }}" class="form-control" placeholder="Enter a {{ field.label|lower }}">
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Register</button>
+        <a href="{% url 'login' %}" class="create-account-link">Already have an account? Login</a>
+        <div class="form-errors">{{ form.errors }}</div>
+    </form>
+</body>
+</html>
